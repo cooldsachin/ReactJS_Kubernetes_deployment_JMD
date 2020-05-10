@@ -40,3 +40,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+
