@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'fresh-shell-275710'
-        CLUSTER_NAME = 'jaimatadi'
-        LOCATION = 'us-central1-a'
+        PROJECT_ID = 'skilled-display-260316'
+        CLUSTER_NAME = 'kube-cluster'
+        LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'gke'
     }
     stages {
@@ -15,7 +15,7 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("shantanusohni/reactjs:${env.BUILD_ID}")
+                    myapp = docker.build("cooldsachin/reactjs:${env.BUILD_ID}")
                 }
             }
         }
