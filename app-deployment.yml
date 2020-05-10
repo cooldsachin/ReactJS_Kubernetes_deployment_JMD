@@ -45,4 +45,18 @@ spec:
     rollingUpdate:
         maxUnavailable: 0
         maxSurge: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: voting-app1
+  namespace: default
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: voting-app1
+  targetCPUUtilizationPercentage: 80
 
