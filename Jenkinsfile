@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'skilled-display-260316'
+        PROJECT_ID = 'mythical-mason-278821'
         CLUSTER_NAME = 'kube-cluster'
         LOCATION = 'us-central1-c'
-        CREDENTIALS_ID = 'skilled-display-260316'
+        CREDENTIALS_ID = 'k8s_key'
     }
     stages {
         stage("Checkout code") {
