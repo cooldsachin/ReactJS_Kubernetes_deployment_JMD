@@ -4,7 +4,7 @@ pipeline {
         PROJECT_ID = 'mythical-mason-278821'
         CLUSTER_NAME = 'kube-cluster'
         LOCATION = 'us-central1-c'
-        CREDENTIALS_ID = 'mythical-mason-278821'
+        CREDENTIALS_ID = 'kubernetes'
     }
     stages {
         stage("Checkout code") {
