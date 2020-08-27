@@ -7,7 +7,7 @@ COPY package.json package-lock.json ./
 # Install the dependencies and make the folder
 RUN npm install && mkdir /react-ui && mv ./node_modules ./react-ui
 
-WORKDIR /react-ui
+WORKDIR ./react-ui
 
 COPY . .
 
@@ -25,7 +25,7 @@ COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy from the stahg 1
-COPY --from=builder /react-ui/build /usr/share/nginx/html
+COPY --from=builder ./react-ui/build /usr/share/nginx/html
 
 EXPOSE 3000 80
 
