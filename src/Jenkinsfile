@@ -141,5 +141,16 @@ spec:
         }
       }
     }
+    stage ("Build Project") {
+      stages {
+        stage ('build master') {
+          when { branch 'master'}
+          steps{
+            container("node") {
+              sh "ng build"
+            }
+          }
+        }
+
   }  
 }  
