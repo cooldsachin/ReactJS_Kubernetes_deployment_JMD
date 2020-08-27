@@ -141,10 +141,29 @@ spec:
         }
       }
     }
-    stage ("Build Project") {
-      steps{
-        container("node") {
-          sh "ng build"
+    //stage ("Build Project") {
+    //  steps{
+    //    container("node") {
+    //      sh "ng build"
+    //    }
+    //  }
+    //}
+    stage ("Build-Image") {
+      steps {
+        container("docker"){
+          sh "docker build --tag=${JOB_NAME}:${BUILD_NUMBER} ."
+          sh "docker images"
+          echo "Pipeline currentResult: ${currentBuild.currentResult}"
+        }
+      }
+      stage("Publish-Project") {
+      steps {
+        container("gcloud") {
+          sh "gsutil -m cp -r ./dist gs://ci-angular-registry/${JOB_NAME}/${BUILD_NUMBER}"
+        }
+        container("docker") {
+          sh "docker tag ${JOB_NAME}:${BUILD_NUMBER} gcr.io/${PROJECT_ID}/${JOB_NAME}:${BUILD_NUMBER}"
+          sh "docker push gcr.io/${PROJECT_ID}/${JOB_NAME}:${BUILD_NUMBER}"
         }
       }
     }
