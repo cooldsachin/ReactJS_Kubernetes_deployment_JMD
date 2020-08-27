@@ -156,7 +156,8 @@ spec:
           echo "Pipeline currentResult: ${currentBuild.currentResult}"
         }
       }
-      stage("Publish-Project") {
+    }  
+    stage("Publish-Project") {
       steps {
         container("gcloud") {
           sh "gsutil -m cp -r ./dist gs://ci-angular-registry/${JOB_NAME}/${BUILD_NUMBER}"
