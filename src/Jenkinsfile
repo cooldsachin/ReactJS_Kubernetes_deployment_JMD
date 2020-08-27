@@ -25,7 +25,7 @@ spec:
       path: "/usr/bin/docker"
   - name: google-cloud-key
     secret:
-      secretName: registry-jenkins
+      secretName: registry-jenkins1
   containers:
   - name: gcloud
     image: gcr.io/cloud-builders/gcloud
@@ -41,7 +41,7 @@ spec:
     - cat
     env:
     - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /var/secrets/google/password.txt
+      value: /var/secrets/google/key.json
     tty: true
   - name: node
     image: node:lts-alpine
@@ -67,7 +67,7 @@ spec:
     - cat
     env:
     - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: var/secrets/google/password.txt
+      value: var/secrets/google/key.json
     tty: true
 """
     }
