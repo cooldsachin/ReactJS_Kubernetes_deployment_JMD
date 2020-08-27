@@ -134,10 +134,10 @@ spec:
           sh 'ls'
           
           echo "Unit test"
-          sh 'ng test'
+          //sh 'ng test'
           
           echo "end-to-end test"
-          sh 'ng e2e'
+          //sh 'ng e2e'
         }
       }
     }
