@@ -113,11 +113,32 @@ spec:
                 ttf-freefont@edge"
           //sh "npm install --save chromium"
         }
-      
-
-
-        
-        
+      }
+    } 
+     stage("Build") {
+      steps {
+        container("node") {
+          sh "npm install"
+          sh "npm install --save chromium"
+          sh "ng --version"
+          sh "mkdir coverage"
+          //sh "mkdir ./node_modules/zlib"
+          //sh "cp ./patch/zlib/* ./node_modules/zlib/"
+        }
+      }
+    }
+    stage("Test") {
+      steps {
+        container("node") {
+          echo "Estructura del directorio"
+          sh 'ls'
+          
+          echo "Unit test"
+          sh 'ng test'
+          
+          echo "end-to-end test"
+          sh 'ng e2e'
+        }
       }
     }
   }  
