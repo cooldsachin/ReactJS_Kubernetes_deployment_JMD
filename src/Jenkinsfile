@@ -141,13 +141,13 @@ spec:
         }
       }
     }
-    //stage ("Build Project") {
-      //steps{
-        //container("node") {
-          //sh "npm run build"
-        //}
-      //}
-    //}
+    stage ("Build Project") {
+      steps{
+        container("node") {
+          sh "npm run build"
+        }
+      }
+    }
     stage ("Build-Image") {
       steps {
         container("docker"){
@@ -161,7 +161,7 @@ spec:
       steps {
         container("gcloud") {
           sh "ls"
-          sh "gsutil -m cp -r ./react-ui/build gs://my-react-bucket/${JOB_NAME}/${BUILD_NUMBER}"
+          sh "gsutil -m cp -r ./build gs://my-react-bucket/${JOB_NAME}/${BUILD_NUMBER}"
         }
         container("docker") {
           sh "docker tag ${JOB_NAME}:${BUILD_NUMBER} gcr.io/${PROJECT_ID}/${JOB_NAME}:${BUILD_NUMBER}"
