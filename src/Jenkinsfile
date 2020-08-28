@@ -2,7 +2,7 @@ def PROJECT_ID = "parabolic-rope-278721"
 
 pipeline {
   options {
-    timeout (time: 35, unit:"MINUTES")
+    timeout (time: 30, unit:"MINUTES")
   }
   agent {
     kubernetes {
@@ -88,7 +88,7 @@ spec:
       steps {
         container('gcloud') {
           //slackSend (color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-          sh 'gcloud auth activate-service-account --project=${PROJECT_ID} --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
+            sh 'gcloud auth activate-service-account --project=${PROJECT_ID} --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
             sh "gcloud config set project ${PROJECT_ID}"
         }
         container('docker') {
@@ -111,8 +111,7 @@ spec:
                 freetype@edge \
                 harfbuzz@edge \
                 ttf-freefont@edge"
-          //sh "npm install --save chromium"
-        }
+          }
       }
     } 
      stage("Build") {
@@ -122,15 +121,13 @@ spec:
           sh "npm install --save chromium"
           sh "ng --version"
           sh "mkdir coverage"
-          //sh "mkdir ./node_modules/zlib"
-          //sh "cp ./patch/zlib/* ./node_modules/zlib/"
         }
       }
     }
     stage("Test") {
       steps {
         container("node") {
-          echo "Estructura del directorio"
+          echo "Directory Structure"
           sh 'ls'
           
           echo "Unit test"
@@ -169,6 +166,50 @@ spec:
         }
       }
     }
+    stage("Deploy Project") {
+      steps {
+        // Deploy in google storage bucket
+        container("gcloud") {
+          sh "gsutil -m rm -r gs://deployed-apps/react-app"
+          sh "gsutil -m cp -r ./build gs://deployed-apps/react-app"
+          echo "Pipeline currentResult: ${currentBuild.currentResult}"
+        }
+      }
+    }
   }
- }
-   
+  post {
+    always {
+      echo "Pipeline currentResult: ${currentBuild.currentResult}"
+      echo "Pipeline Finalized"
+    }
+    aborted {
+      echo "Pipeline Aborted"
+      //slackSend (color: 'gray', message: "ABORTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      //SendEmail("Pipeline has aborted, please check information in ${BUILD_URL}console")
+    }
+    failure {
+      echo "Pipeline Failed"
+      //slackSend (color: 'bad', message: "FAIL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      //SendEmail("There was a failure in the execution of Pipeline ${JOB_NAME}-${BUILD_DISPLAY_NAME}, please check the information in ${BUILD_URL}")
+    }
+    success {
+      echo "Pipeline Exited!!"
+      //slackSend (color: 'good', message: "DONE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+  }
+}
+
+def SendEmail(body) {
+    script {
+    try {
+        mail from: 'abc@companyname.com',
+            to: "${COMMITTER_EMAIL}",
+            subject: "Pipeline ${JOB_NAME}-${BUILD_DISPLAY_NAME}",
+            body: body
+    }
+    catch (exc) {
+            echo 'Problem sending mail'
+    }
+    }
+}
+
