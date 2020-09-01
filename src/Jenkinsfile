@@ -138,13 +138,13 @@ spec:
         }
       }
     }
-    stage ("Build Project") {
-      steps{
-        container("node") {
-          sh "npm run build"
-        }
-      }
-    }
+   // stage ("Build Project") {
+     // steps{
+     //   container("node") {
+     //     sh "npm run build"
+     //   }
+     // }
+   // }
     stage ("Build-Image") {
       steps {
         container("docker"){
